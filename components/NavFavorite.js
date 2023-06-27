@@ -12,13 +12,13 @@ const NavFavorite = () => {
         {
             id: '123',
             icon: 'home',
-            location: 'Home',
+            location: 'Current Location',
             destination: 'Chittarikkal, Kerala, India'
         },
         {
             id: '456',
             icon: 'briefcase',
-            location: 'Work',
+            location: 'Home',
             destination: 'Calicut, Kerala, India'
         }
     ]

@@ -8,6 +8,7 @@ import {
   } from "react-native";
   import React from "react";
   import tw from "twrnc";
+    import { useNavigation } from "@react-navigation/native";
    
   const cargoImage = require("./cargo.png");
 
@@ -15,34 +16,35 @@ import {
   const data = [
     {
       id: "123",
-      title: "Get a ride",
+      title: "Get a Ride",
       image: "https://links.papareact.com/3pn",
-      screen: "MapScreen",
+      screen: "BookScreen",
     },
     {
       id: "456",
       title: "Get a Cargo",
       image : "https://github.com/amalprasad0/pickmi-app/blob/master/components/cargo.png?raw=true",
-      screen: "EatsScreen",
+      screen: "BookScreen",
     },
     {
         id: "45",
         title: "Mechanic",
         image: "https://github.com/amalprasad0/pickmi-app/blob/master/components/male-mechanic.png?raw=true",
-        screen: "EatsScreen",
+        screen: "MechScreen",
       },
       {
         id: "434",
         title: "Tyre Repair",
-        image: "https://github.com/amalprasad0/pickmi-app/blob/master/components/male-mechanic.png?raw=true",
-        screen: "EatsScreen",
+        image: "https://github.com/amalprasad0/pickmi-app/blob/master/components/trye.png?raw=true",
+        screen: "TyreScreen",
       },
   ];
   
   const NavOptions = () => {
+    const navigation = useNavigation();
     const renderCard = ({ item }) => (
       <TouchableOpacity
-        onPress={() => alert("clicked")}
+        onPress={() => navigation.navigate(item.screen)}
         style={tw`p-2 pl-5 pb-8 pt-4 bg-gray-200 m-2 w-40 h-52 border border-gray-300 rounded-xl`}
         // disabled={!origin}
       >

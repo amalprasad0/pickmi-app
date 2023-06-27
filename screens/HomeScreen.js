@@ -33,16 +33,14 @@ const TaxiBookingScreen = () => {
         styles={{
           container: {
             flex: 0,
-           paddingTop: 10,
-           paddingLeft: 10,
+            paddingTop: 10,
+            paddingLeft: 10,
           },
           textInput: {
             fontSize: 18,
           },
         }}
         onPress={(data, details = null) => {
-          // console.log(data)
-          // console.log(details)
           dispatch(
             setOrigin({
               location: details.geometry.location,
@@ -60,8 +58,8 @@ const TaxiBookingScreen = () => {
           language: "en",
         }} // this is for the google maps api
       />
-      <NavOptions/>
-      <NavFavorite/>   
+      <NavOptions />
+      <NavFavorite />
     </SafeAreaView>
   );
 };
