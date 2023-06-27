@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Image } from "react-native";
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Image ,FlatList } from "react-native";
 import tw from "twrnc"
 import NavOptions from "../components/NavOptions";
 const TaxiBookingScreen = () => {
@@ -17,6 +17,29 @@ const TaxiBookingScreen = () => {
       <Text style={tw`text-5xl font-bold mt-6`}>Pickmi</Text>
      </View>
      <NavOptions/>
+      <View style={tw`h-1/4`}>
+        <Text style={tw`text-2xl p-5`}>History</Text>
+        <FlatList
+          data={[
+            {key: 'Devin'},
+            {key: 'Dan'},
+            {key: 'Dominic'},
+            {key: 'Jackson'},
+            {key: 'James'},
+            {key: 'Joel'},
+            {key: 'John'},
+            {key: 'Jillian'},
+            {key: 'Jimmy'},
+            {key: 'Julie'},
+          ]}
+          renderItem={({item}) =>
+            
+           <Text style={tw`text-sm p-5`}>{item.key}</Text>
+           
+          
+          }
+        />
+      </View>
     </SafeAreaView>
   );
 };

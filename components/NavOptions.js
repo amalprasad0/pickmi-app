@@ -27,8 +27,8 @@ import {
     },
     {
         id: "45",
-        title: "Book a Mechanic",
-        image: "https://links.papareact.com/28w",
+        title: "Mechanic",
+        image: "https://github.com/amalprasad0/pickmi-app/blob/master/components/male-mechanic.png?raw=true",
         screen: "EatsScreen",
       },
   ];
@@ -37,7 +37,7 @@ import {
     const renderCard = ({ item }) => (
       <TouchableOpacity
         onPress={() => alert("clicked")}
-        style={tw`p-2 pl-8 pb-8 pt-4 bg-gray-200 m-2 w-40 h-52 border border-gray-300 rounded-xl`}
+        style={tw`p-2 pl-5 pb-8 pt-4 bg-gray-200 m-2 w-40 h-52 border border-gray-300 rounded-xl`}
         // disabled={!origin}
       >
         <View>
@@ -67,6 +67,7 @@ import {
   
     return (
       <FlatList
+       style={tw`mt-5 ml-4`}
         data={dividedData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderRow}
