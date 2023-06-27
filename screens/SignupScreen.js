@@ -6,7 +6,7 @@ import {
   StatusBar,
   TextInput,
   Button,
-  ToastAndroid
+  ToastAndroid,
 } from "react-native";
 import React from "react";
 import tw from "twrnc";
@@ -73,20 +73,23 @@ const SignupScreen = () => {
                   var user = userCredential.user;
                   console.log(user);
                   ToastAndroid.showWithGravityAndOffset(
-                    'Account Created Successfully',
+                    "Account Created Successfully",
                     ToastAndroid.LONG, //can be SHORT, LONG
                     ToastAndroid.CENTER, //can be TOP, BOTTON, CENTER
                     25, //xOffset
-                    500, //yOffset
+                    500 //yOffset
                   );
-                  
+
                   navigation.navigate("StartupScreen");
                 })
                 .catch((error) => {
                   var errorCode = error.code;
                   var errorMessage = error.message;
                   console.log(errorCode, errorMessage);
-                  alert(" The email address is already in use by another account. Please  try Login ", error);
+                  alert(
+                    " The email address is already in use by another account. Please  try Login ",
+                    error
+                  );
                   console.log("errors", error);
                   // ..
                 });
@@ -94,11 +97,17 @@ const SignupScreen = () => {
             style={[tw`bg-black rounded-lg p-2  justify-center  items-center`]}
           />
         </View>
-        <Text style={tw`text-center mt-2`}>Already have an account? <Text style={{color: 'blue'}}
-         onPress={()=>{
-          navigation.navigate("LoginScreen");
-         }}
-         >Login Here</Text> </Text>
+        <Text style={tw`text-center mt-2`}>
+          Already have an account?{" "}
+          <Text
+            style={{ color: "blue" }}
+            onPress={() => {
+              navigation.navigate("LoginScreen");
+            }}
+          >
+            Login Here
+          </Text>{" "}
+        </Text>
         {/* <Text style={[tw`my-10`]}>Designed & Developed by LLC</Text> */}
       </View>
     </SafeAreaView>

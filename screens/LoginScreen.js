@@ -14,13 +14,47 @@ import { useNavigation } from "@react-navigation/native";
 import { Firebase } from "../Config";
 import "firebase/compat/auth";
 import { useState } from "react";
+import { setPersistence } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [paswrd, setPaswrd] = useState("");
+  const LoginStatus = async () => {
+    try {
+      await AsyncStorage.setItem("loginStatus", "true");
+    } catch (e) {
+      // saving error
+      (error) => console.log(error);
+    }
+  };
 
   const navigation = useNavigation();
-
+  const login = () => {
+    Firebase.auth()
+      .signInWithEmailAndPassword(email, paswrd)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("User is logged in.");
+        navigation.navigate("HomeScreen");
+        ToastAndroid.showWithGravityAndOffset(
+          "Login Successfully",
+          ToastAndroid.LONG, //can be SHORT, LONG
+          ToastAndroid.CENTER, //can be TOP, BOTTON, CENTER
+          25, //xOffset
+          500 //yOffset
+        );
+        LoginStatus();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("Error code:", errorCode);
+        console.log("Error message:", errorMessage);
+        ToastAndroid.show(errorMessage, ToastAndroid.SHORT);
+      });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={tw`flex h-2/4 justify-center`}>
@@ -65,35 +99,7 @@ const LoginScreen = () => {
             title="Next"
             color="black"
             onPress={() => {
-              const Email = email;
-              const Password = paswrd;
-              Firebase.auth()
-                .signInWithEmailAndPassword(Email, Password)
-                .then((userCredential) => {
-                  // Signed in
-                  var user = userCredential.user;
-                  console.log(user);
-                  ToastAndroid.showWithGravityAndOffset(
-                    'Login Successfully',
-                    ToastAndroid.LONG, //can be SHORT, LONG
-                    ToastAndroid.CENTER, //can be TOP, BOTTON, CENTER
-                    25, //xOffset
-                    500, //yOffset
-                  );
-                  navigation.navigate("HomeScreen");
-                })
-                .catch((error) => {
-                  var errorCode = error.code;
-                  var errorMessage = error.message;
-                  console.log(errorCode, errorMessage);
-                  ToastAndroid.showWithGravityAndOffset(
-                    'The password is invalid or the user does not have a password',
-                    ToastAndroid.LONG, //can be SHORT, LONG
-                    ToastAndroid.CENTER, //can be TOP, BOTTON, CENTER
-                    25, //xOffset
-                    500, //yOffset
-                  );
-                });
+              login();
             }}
             style={[tw`bg-black rounded-lg p-2  justify-center  items-center`]}
           />
@@ -109,10 +115,18 @@ const LoginScreen = () => {
             Signup Here
           </Text>
         </Text>
-        <Text style={tw`text-center mt-2`}>Forgot Password ? <Text style={{color:"blue"}} onPress={()=>{
-          navigation.navigate("ForgotPasswordScreen")
-        }}>Reset Now</Text></Text>
-         
+        <Text style={tw`text-center mt-2`}>
+          Forgot Password ?{" "}
+          <Text
+            style={{ color: "blue" }}
+            onPress={() => {
+              navigation.navigate("ForgotPasswordScreen");
+            }}
+          >
+            Reset Now
+          </Text>
+        </Text>
+
         {/* <Text style={[tw`my-10`]}>Designed & Developed by LLC</Text> */}
       </View>
     </SafeAreaView>

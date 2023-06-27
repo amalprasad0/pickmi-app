@@ -11,10 +11,18 @@ import SignupScreen from "./screens/SignupScreen";
 import LoginScreen from "./screens/LoginScreen";
 import { Firebase } from "./Config";
 import StartupScreen from "./screens/StartupScreen";
-
+import { useEffect } from "react";
+import {
+  getAuth,
+  setPersistence,
+  signInWithEmailAndPassword,
+  browserSessionPersistence,
+} from "firebase/auth";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function App() {
   const Stack = createNativeStackNavigator();
-  
+
   return (
     <Provider store={store}>
       <SafeAreaProvider>
@@ -22,11 +30,12 @@ export default function App() {
           <NavigationContainer>
             <Stack.Navigator
               screenOptions={{ headerShown: false }}
-              initialRouteName="HomeScreen" >
+              initialRouteName="HomeScreen"
+            >
               <Stack.Screen name="SignupScreen" component={SignupScreen} />
               <Stack.Screen name="HomeScreen" component={HomeScreen} />
               <Stack.Screen name="LoginScreen" component={LoginScreen} />
-              <Stack.Screen name="StartupScreen" component={StartupScreen}  />            
+              <Stack.Screen name="StartupScreen" component={StartupScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </KeyboardAvoidingView>
