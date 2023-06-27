@@ -34,7 +34,7 @@ import {
       },
       {
         id: "434",
-        title: "Tyre Repair",
+        title: "My Booking",
         image: "https://github.com/amalprasad0/pickmi-app/blob/master/components/trye.png?raw=true",
         screen: "TyreScreen",
       },

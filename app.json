@@ -22,7 +22,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.amalkp141.pickmiapp"
+      "package": "com.amalkp141.pickmiapp",
+      "config":{
+        "googleMaps":{
+          "apiKey":"AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
