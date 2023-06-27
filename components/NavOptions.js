@@ -21,7 +21,7 @@ import {
     },
     {
       id: "456",
-      title: "get a Cargo",
+      title: "Get a Cargo",
       image : "https://github.com/amalprasad0/pickmi-app/blob/master/components/cargo.png?raw=true",
       screen: "EatsScreen",
     },
