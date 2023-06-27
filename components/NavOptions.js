@@ -8,6 +8,9 @@ import {
   } from "react-native";
   import React from "react";
   import tw from "twrnc";
+
+  const cargoImage = require("./cargo.png");
+
   
   const data = [
     {
@@ -19,7 +22,7 @@ import {
     {
       id: "456",
       title: "get a Cargo",
-      image :"./cargo.png",
+      image : "https://github.com/amalprasad0/pickmi-app/blob/master/components/cargo.png?raw=true",
       screen: "EatsScreen",
     },
     {
