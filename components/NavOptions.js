@@ -8,7 +8,7 @@ import {
   } from "react-native";
   import React from "react";
   import tw from "twrnc";
-
+   
   const cargoImage = require("./cargo.png");
 
   
@@ -28,6 +28,12 @@ import {
     {
         id: "45",
         title: "Mechanic",
+        image: "https://github.com/amalprasad0/pickmi-app/blob/master/components/male-mechanic.png?raw=true",
+        screen: "EatsScreen",
+      },
+      {
+        id: "434",
+        title: "Tyre Repair",
         image: "https://github.com/amalprasad0/pickmi-app/blob/master/components/male-mechanic.png?raw=true",
         screen: "EatsScreen",
       },

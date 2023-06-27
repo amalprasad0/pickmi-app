@@ -1,55 +1,73 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Image ,FlatList } from "react-native";
-import tw from "twrnc"
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  SafeAreaView,
+  Image,
+  FlatList,
+} from "react-native";
+import tw from "twrnc";
 import NavOptions from "../components/NavOptions";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { setDestination, setOrigin } from "../slices/navSlices";
+import { useDispatch } from "react-redux";
+import NavFavorite from "../components/NavFavorite";
 const TaxiBookingScreen = () => {
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
 
-  const handleBooking = () => {
-    // Handle booking logic here
-    console.log("Booking confirmed!");
-  };
+  const dispatch = useDispatch();
 
   return (
-    <SafeAreaView style={[tw`bg-white h-full`,styles.container]}>
-     <View style={tw`pt-8 pl-4`}>
-      <Text style={tw`text-5xl font-bold mt-6`}>Pickmi</Text>
-     </View>
-     <NavOptions/>
-      <View style={tw`h-1/4`}>
-        <Text style={tw`text-2xl p-5`}>History</Text>
-        <FlatList
-          data={[
-            {key: 'Devin'},
-            {key: 'Dan'},
-            {key: 'Dominic'},
-            {key: 'Jackson'},
-            {key: 'James'},
-            {key: 'Joel'},
-            {key: 'John'},
-            {key: 'Jillian'},
-            {key: 'Jimmy'},
-            {key: 'Julie'},
-          ]}
-          renderItem={({item}) =>
-            
-           <Text style={tw`text-sm p-5`}>{item.key}</Text>
-           
-          
-          }
-        />
+    <SafeAreaView style={[tw`bg-white h-full`, styles.container]}>
+      <View style={tw`pt-4 pl-4`}>
+        <Text style={tw`text-5xl font-bold mt-6`}>Pickmi</Text>
       </View>
+      <GooglePlacesAutocomplete
+        nearbyPlacesAPI="GooglePlacesSearch"
+        debounce={400}
+        placeholder="Where From?"
+        styles={{
+          container: {
+            flex: 0,
+           paddingTop: 10,
+           paddingLeft: 10,
+          },
+          textInput: {
+            fontSize: 18,
+          },
+        }}
+        onPress={(data, details = null) => {
+          // console.log(data)
+          // console.log(details)
+          dispatch(
+            setOrigin({
+              location: details.geometry.location,
+              description: data.description,
+            })
+          );
+          dispatch(setDestination(null));
+        }}
+        fetchDetails={true}
+        returnKeyType={"search"}
+        minLength={2}
+        enablePoweredByContainer={false}
+        query={{
+          key: "AIzaSyDhIyWfb1NU_3fC0cJ5okzfnvImQb6QFnQ",
+          language: "en",
+        }} // this is for the google maps api
+      />
+      <NavOptions/>
+      <NavFavorite/>   
     </SafeAreaView>
   );
 };
 
-
-
 const styles = StyleSheet.create({
-  container: {
-    
-  }
+  container: {},
 });
 
 export default TaxiBookingScreen;
