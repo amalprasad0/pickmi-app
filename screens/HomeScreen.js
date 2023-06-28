@@ -29,6 +29,7 @@ const TaxiBookingScreen = () => {
       <GooglePlacesAutocomplete
         nearbyPlacesAPI="GooglePlacesSearch"
         debounce={400}
+       
         placeholder="Where From?"
         styles={{
           container: {
@@ -56,6 +57,7 @@ const TaxiBookingScreen = () => {
         query={{
           key: "AIzaSyDhIyWfb1NU_3fC0cJ5okzfnvImQb6QFnQ",
           language: "en",
+          components:"country:in"
         }} // this is for the google maps api
       />
       <NavOptions />

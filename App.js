@@ -16,12 +16,12 @@ export default function App() {
   const Stack = createNativeStackNavigator();
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
+      <SafeAreaProvider style={styles.container}>
         <KeyboardAvoidingView style={{ flex: 1 }}>
           <NavigationContainer>
             <Stack.Navigator
               screenOptions={{ headerShown: false }}
-              initialRouteName="HomeScreen"
+              initialRouteName="BookScreen"
             >
               <Stack.Screen name="SignupScreen" component={SignupScreen} />
               <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -36,12 +36,10 @@ export default function App() {
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     marginTop:StatusBar.currentHeight
-//   },
-// });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    // marginTop:StatusBar.currentHeight
+  },
+});
