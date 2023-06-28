@@ -15,12 +15,24 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { setDestination, setOrigin } from "../slices/navSlices";
 import { useDispatch } from "react-redux";
 import NavFavorite from "../components/NavFavorite";
+import { Firebase } from "../Config";
+import { useNavigation } from "@react-navigation/native";
 const TaxiBookingScreen = () => {
-  const [pickupLocation, setPickupLocation] = useState("");
-  const [dropoffLocation, setDropoffLocation] = useState("");
-
+ 
+  const navigation = useNavigation();
   const dispatch = useDispatch();
-
+  //check if user is logged in  
+  const [user, setUser] = useState(null);
+  Firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      setUser(user);
+      console.log(user);
+    } else {
+      setUser(null);
+      navigation.navigate("LoginScreen");
+    }
+  });
+  
   return (
     <SafeAreaView style={[tw`bg-white h-full`, styles.container]}>
       <View style={tw`pt-4 pl-4`}>

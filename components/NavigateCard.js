@@ -11,7 +11,7 @@ const NavigateCard = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     return (
-        <SafeAreaView style={tw`bg-white flex-1`}>
+        <SafeAreaView style={tw`bg-white flex-1 border border-gray-300 rounded-xl`}>
             <View style={tw`border-t border-gray-200 flex-shrink`}>
                 <View>
                     <GooglePlacesAutocomplete

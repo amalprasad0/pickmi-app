@@ -1,4 +1,4 @@
-import { StyleSheet, KeyboardAvoidingView, StatusBar } from "react-native";
+import { StyleSheet, KeyboardAvoidingView, } from "react-native";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -12,16 +12,18 @@ import LoginScreen from "./screens/LoginScreen";
 import { Firebase } from "./Config";
 import StartupScreen from "./screens/StartupScreen";
 import BookScreen from "./screens/BookScreen";
+import { StatusBar } from "expo-status-bar";
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (
     <Provider store={store}>
       <SafeAreaProvider style={styles.container}>
+        <StatusBar style="auto" StatusBarStyle="dark" />
         <KeyboardAvoidingView style={{ flex: 1 }}>
           <NavigationContainer>
             <Stack.Navigator
               screenOptions={{ headerShown: false }}
-              initialRouteName="BookScreen"
+              initialRouteName="HomeScreen"
             >
               <Stack.Screen name="SignupScreen" component={SignupScreen} />
               <Stack.Screen name="HomeScreen" component={HomeScreen} />

@@ -16,7 +16,8 @@ const BookScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={tw`text-3xl font-semibold p-5`}>Hello Amal !</Text>
-      <View style={tw`h-1/2 mt-4 p-5 mx-1 bg-neutral-600 w-96 border-gray-300 rounded-xl text-white`}>
+      <View style={tw`h-1/2 justify-center`}>
+      <View style={tw` mt-3 p-4 mx-1 bg-neutral-600 w-96 border-gray-300 rounded-xl text-white`}>
         <View Style={tw`w-70 border border-gray-300 rounded-xl`}>
           <Text style={tw`text-sm text-white`}>Pickup:</Text>
           <Text style={tw`text-2xl pl-3 text-white`}>Chittarikkal, Kerala, India</Text>
@@ -34,6 +35,7 @@ const BookScreen = () => {
           <Text style={tw`text-sm text-white`}>Ride Mode : Auto</Text>
           <Text style={tw`text-sm text-white`}>OTP : 7823</Text>
           </View>
+      </View>
       </View>
       <NavigateCard/>
     </SafeAreaView>
