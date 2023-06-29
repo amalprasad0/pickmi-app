@@ -14,9 +14,9 @@ import NavOptions from "../components/NavOptions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { setDestination, setOrigin } from "../slices/navSlices";
 import { useDispatch } from "react-redux";
-import NavFavorite from "../components/NavFavorite";
 import { Firebase } from "../Config";
 import { useNavigation } from "@react-navigation/native";
+import NavLocation from "../components/NavLocation";
 const TaxiBookingScreen = () => {
  
   const navigation = useNavigation();
@@ -54,6 +54,8 @@ const TaxiBookingScreen = () => {
           },
         }}
         onPress={(data, details = null) => {
+          console.log("Location",details.geometry.location);
+          console.log("Description",data.description);
           dispatch(
             setOrigin({
               location: details.geometry.location,
@@ -73,7 +75,7 @@ const TaxiBookingScreen = () => {
         }} // this is for the google maps api
       />
       <NavOptions />
-      <NavFavorite />
+      <NavLocation/>
     </SafeAreaView>
   );
 };
