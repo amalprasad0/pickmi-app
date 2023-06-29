@@ -25,7 +25,7 @@ const BookScreen = () => {
           <View Style={tw`w-70 border border-gray-300 rounded-xl`}>
             <Text style={tw`text-sm text-white`}>Pickup:</Text>
             <Text
-              style={tw`text-2xl font-light pl-3 text-white drop-shadow-xl`}
+              style={tw`text-2xl font-light pl-3 text-white`}
             >
               {origin?.description}
             </Text>

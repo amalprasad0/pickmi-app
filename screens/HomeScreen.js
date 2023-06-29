@@ -16,7 +16,7 @@ import { setDestination, setOrigin } from "../slices/navSlices";
 import { useDispatch } from "react-redux";
 import { Firebase } from "../Config";
 import { useNavigation } from "@react-navigation/native";
-import NavLocation from "../components/NavLocation";
+// import NavLocation from "../components/NavLocation";
 const TaxiBookingScreen = () => {
  
   const navigation = useNavigation();
@@ -75,7 +75,7 @@ const TaxiBookingScreen = () => {
         }} // this is for the google maps api
       />
       <NavOptions />
-      <NavLocation/>
+      {/* <NavLocation/> */}
     </SafeAreaView>
   );
 };

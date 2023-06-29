@@ -5,7 +5,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import { useDispatch } from 'react-redux';
 import { setDestination } from '../slices/navSlices';
 import { useNavigation } from '@react-navigation/native';
-import NavFavourite from './NavFavorite';
+// import NavFavourite from './NavFavorite';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 const NavigateCard = () => {
     const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const NavigateCard = () => {
                         minLength={2}
                     />
                 </View>
-                <NavFavourite />
+                {/* <NavFavourite /> */}
             </View>
             {/* <View style={tw`flex-row bg-white justify-evenly py-2 mt-auto border-t border-gray-200`}>
                 <TouchableOpacity
