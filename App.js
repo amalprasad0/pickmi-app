@@ -13,6 +13,7 @@ import { Firebase } from "./Config";
 import StartupScreen from "./screens/StartupScreen";
 import BookScreen from "./screens/BookScreen";
 import { StatusBar } from "expo-status-bar";
+
 export default function App() {
   const Stack = createNativeStackNavigator();
   return (

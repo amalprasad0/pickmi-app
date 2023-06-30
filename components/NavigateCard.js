@@ -13,19 +13,7 @@ const NavigateCard = () => {
     const navigation = useNavigation();
     const origin = useSelector(selectOrigin);
     const destination = useSelector(selectDestination);
-    const TimeTraveled=()=>{
-          if (!origin || !destination) return;
-          const getTraveltime = async () => {
-            const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.description}&destinations=${destination.description}&key=AIzaSyDhIyWfb1NU_3fC0cJ5okzfnvImQb6QFnQ`;
-            fetch(url)
-              .then((res) => res.json())
-              .then((data) => {
-                console.log(data.rows[0].elements[0]);
-                dispatch(setTravelTimeInformation(data.rows[0].elements[0]));
-              });
-          };
-          getTraveltime();
-      }
+    
     return (
         <SafeAreaView style={tw`bg-white flex-1 border border-gray-300 rounded-xl`}>
             <View style={tw`border-t border-gray-200 flex-shrink`}>

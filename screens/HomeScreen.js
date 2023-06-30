@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import NavFavorite from "../components/NavFavorite";
 import { Firebase } from "../Config";
 import { useNavigation } from "@react-navigation/native";
+
 const TaxiBookingScreen = () => {
  
   const navigation = useNavigation();
@@ -41,7 +42,6 @@ const TaxiBookingScreen = () => {
       <GooglePlacesAutocomplete
         nearbyPlacesAPI="GooglePlacesSearch"
         debounce={400}
-       
         placeholder="Where From?"
         styles={{
           container: {

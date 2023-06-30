@@ -1,19 +1,20 @@
 import { StyleSheet, Text, View, SafeAreaView, StatusBar } from "react-native";
 import React from "react";
 import tw from "twrnc";
-import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { selectOrigin, selectDestination } from "../slices/navSlices";
 import NavigateCard from "../components/NavigateCard";
 import RideOption from "../components/RideOption";
-import { useEffect } from "react";
+import { selectTravelTimeInformation } from "../slices/navSlices";
 const BookScreen = () => {
-  const dispatch = useDispatch();
   const Stack = createNativeStackNavigator();
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
-  
+  const timeTravelInformation = useSelector(selectTravelTimeInformation);
+  console.log(timeTravelInformation);
+  const distance = timeTravelInformation?.distance?.text * 1.60934;
+  console.log(distance);
   return (
     <SafeAreaView style={styles.container}>
       <Text style={tw`text-3xl font-semibold p-5`}>Let's start the trip</Text>
@@ -42,20 +43,25 @@ const BookScreen = () => {
               {destination ? destination.description : "not selected"}
             </Text>
           </View>
-          <View style={tw`mt-3 p-5`}>
-            <Text style={tw`text-2xl text-white`}>Date & Time</Text>
+          <View style={tw` p-5`}>
+            <Text style={tw`text-2xl text-white`}>Travel Time</Text>
             <Text style={tw`text-sm text-white font-thin`}>
-              Mon, 12 July, 10:00 AM
+              {timeTravelInformation?.duration?.text}
+            </Text>
+            <Text style={tw`text-2xl text-white`}>Distance</Text>
+            <Text style={tw`text-sm text-white font-thin`}>
+              {timeTravelInformation?.distance?.text}
             </Text>
           </View>
-          <View style={tw` p-5`}>
-            <Text style={tw`text-2xl text-white font-thin`}>
-              Price : ₹ 1000/-
+          <View style={tw` p-1 pl-5`}>
+            <Text style={tw`text-xl text-white font-thin`}>
+              Date & Time : 12/12/2021 12:00 PM
             </Text>
+            <Text style={tw`text-xl text-white font-thin`}>OTP : 7823</Text>
             <Text style={tw`text-sm text-white font-thin`}>
-              Ride Mode : Auto
+              Ride Mode : Auto Rickshaw
             </Text>
-            <Text style={tw`text-sm text-white font-thin`}>OTP : 7823</Text>
+           
           </View>
         </View>
       </View>
