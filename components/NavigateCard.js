@@ -3,13 +3,29 @@ import React from 'react'
 import tw from 'twrnc'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useDispatch } from 'react-redux';
-import { setDestination } from '../slices/navSlices';
+import { setDestination,setTravelTimeInformation } from '../slices/navSlices';
 import { useNavigation } from '@react-navigation/native';
 import NavFavourite from './NavFavorite';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
+import { selectOrigin,selectDestination } from '../slices/navSlices';
 const NavigateCard = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const origin = useSelector(selectOrigin);
+    const destination = useSelector(selectDestination);
+    const TimeTraveled=()=>{
+          if (!origin || !destination) return;
+          const getTraveltime = async () => {
+            const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.description}&destinations=${destination.description}&key=AIzaSyDhIyWfb1NU_3fC0cJ5okzfnvImQb6QFnQ`;
+            fetch(url)
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(data.rows[0].elements[0]);
+                dispatch(setTravelTimeInformation(data.rows[0].elements[0]));
+              });
+          };
+          getTraveltime();
+      }
     return (
         <SafeAreaView style={tw`bg-white flex-1 border border-gray-300 rounded-xl`}>
             <View style={tw`border-t border-gray-200 flex-shrink`}>
@@ -25,8 +41,9 @@ const NavigateCard = () => {
                                     location: details.geometry.location,
                                     description: data.description,
                                 }))
-                            navigation.navigate("RideOptionsCard")
+                            navigation.navigate("RideOption")
                             // console.log(data, details);
+                            TimeTraveled();
 
                         }}
                         fetchDetails={true}
