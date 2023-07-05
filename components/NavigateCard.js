@@ -15,7 +15,7 @@ const NavigateCard = () => {
     const destination = useSelector(selectDestination);
     
     return (
-        <SafeAreaView style={tw`bg-white flex-1 border border-gray-300 rounded-xl`}>
+        <SafeAreaView style={tw`bg-white flex-1`}>
             <View style={tw`border-t border-gray-200 flex-shrink`}>
                 <View>
                     <GooglePlacesAutocomplete
@@ -31,7 +31,6 @@ const NavigateCard = () => {
                                 }))
                             navigation.navigate("RideOption")
                             // console.log(data, details);
-                            TimeTraveled();
 
                         }}
                         fetchDetails={true}

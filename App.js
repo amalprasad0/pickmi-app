@@ -9,10 +9,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 import SignupScreen from "./screens/SignupScreen";
 import LoginScreen from "./screens/LoginScreen";
-import { Firebase } from "./Config";
 import StartupScreen from "./screens/StartupScreen";
 import BookScreen from "./screens/BookScreen";
 import { StatusBar } from "expo-status-bar";
+import ConfirmScreen from "./screens/ConfirmScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -24,13 +24,15 @@ export default function App() {
           <NavigationContainer>
             <Stack.Navigator
               screenOptions={{ headerShown: false }}
-              initialRouteName="HomeScreen"
+              initialRouteName="BookScreen"
             >
               <Stack.Screen name="SignupScreen" component={SignupScreen} />
               <Stack.Screen name="HomeScreen" component={HomeScreen} />
               <Stack.Screen name="LoginScreen" component={LoginScreen} />
               <Stack.Screen name="StartupScreen" component={StartupScreen} />
               <Stack.Screen name="BookScreen" component={BookScreen} />
+              <Stack.Screen name="ConfirmScreen" component={ConfirmScreen} />
+
             </Stack.Navigator>
           </NavigationContainer>
         </KeyboardAvoidingView>
@@ -41,8 +43,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    
     // marginTop:StatusBar.currentHeight
   },
 });

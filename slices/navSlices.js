@@ -6,6 +6,7 @@ const initialState = {
     destination: null,
     travelTimeInformation: null,
     userCredentials: null,
+    booking: null,
 };
 
 
@@ -25,12 +26,16 @@ export const navSlice = createSlice({
         setUserCredentials: (state, action) => { // Add setUserCredentials reducer
             state.userCredentials = action.payload;
         },
+        setBooking: (state, action) => { // Add setBooking reducer
+            state.booking = action.payload;
+        }
     },         
 });
 
-export const { setOrigin, setDestination, setTravelTimeInformation } = navSlice.actions;
+export const { setOrigin, setDestination, setTravelTimeInformation,setBooking } = navSlice.actions;
 export const selectOrigin = (state) => state.nav.origin;
 export const selectDestination = (state) => state.nav.destination;
 export const selectTravelTimeInformation = (state) => state.nav.travelTimeInformation;
 export const selectUserCredentials = (state) => state.nav.userCredentials; // Add selectUserCredentials selector
+export const selectBooking = (state) => state.nav.booking; // Add selectBooking selector
 export default navSlice.reducer;

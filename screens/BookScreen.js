@@ -7,6 +7,7 @@ import { selectOrigin, selectDestination } from "../slices/navSlices";
 import NavigateCard from "../components/NavigateCard";
 import RideOption from "../components/RideOption";
 import { selectTravelTimeInformation } from "../slices/navSlices";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 const BookScreen = () => {
   const Stack = createNativeStackNavigator();
   const origin = useSelector(selectOrigin);
@@ -16,20 +17,20 @@ const BookScreen = () => {
   const distance = timeTravelInformation?.distance?.text * 1.60934;
   console.log(distance);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[tw`bg-white`,styles.container]}>
       <Text style={tw`text-3xl font-semibold p-5`}>Let's start the trip</Text>
       <View style={tw`h-1/2 items-center`}>
         <View
-          style={tw` mt-3 p-4 mx-1 bg-gray-950 w-96 border-gray-300 rounded-xl text-white`}
+          style={[tw`mt-2 p-3 mx-1 bg-gray-950 border-gray-300 rounded-xl text-white`,styles.cardProp]}
         >
           <View
             Style={[
-              tw`w-70 border border-gray-300 rounded-xl`,
+              tw`w-50 border text-white border-gray-300 rounded-xl`,
               styles.shadowProp,
             ]}
           >
             <Text style={tw`text-sm text-white`}>Pickup:</Text>
-            <Text style={tw`text-2xl pl-3 text-white font-thin`}>
+            <Text style={tw`text-xl pl-3 text-white font-thin`}>
               {origin ? origin.description : "not selected"}
             </Text>
           </View>
@@ -39,7 +40,7 @@ const BookScreen = () => {
             ]}
           >
             <Text style={tw`text-sm text-white`}>Drop off:</Text>
-            <Text style={tw`text-2xl text-white pl-3 font-thin`}>
+            <Text style={tw`text-xl text-white pl-3 font-thin`}>
               {destination ? destination.description : "not selected"}
             </Text>
           </View>
@@ -54,12 +55,15 @@ const BookScreen = () => {
             </Text>
           </View>
           <View style={tw` p-1 pl-5`}>
-            <Text style={tw`text-xl text-white font-thin`}>
-              Date & Time : 12/12/2021 12:00 PM
-            </Text>
-            <Text style={tw`text-xl text-white font-thin`}>OTP : 7823</Text>
+            
             <Text style={tw`text-sm text-white font-thin`}>
               Ride Mode : Auto Rickshaw
+            </Text>
+            <Text style={tw`text-sm text-white font-thin`}>
+              Fare : Rs. 100
+            </Text>
+            <Text style={tw`text-base text-white font-thin`}>
+              Date & Time : 12/12/2021 12:00 PM
             </Text>
            
           </View>
@@ -81,7 +85,7 @@ export default BookScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     paddingTop: StatusBar.currentHeight,
   },
   conent: {
@@ -93,5 +97,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 10,
     shadowRadius: 9,
   },
+  cardProp:{
+    height:hp('47%'),
+    width:wp('90%'),
+  }
 });
 // {origin?.description}

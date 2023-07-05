@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { selectOrigin, selectDestination } from "../slices/navSlices";
 import { useDispatch } from "react-redux";
 import { setTravelTimeInformation } from "../slices/navSlices";
+import { setBooking } from "../slices/navSlices";
+import { Firebase } from "../Config";
 const data = [
   {
     id: "Car-123",
@@ -33,6 +35,7 @@ const data = [
 const SURGE_CHARGE_RATE = 1.5;
 const RideOptionsCard = () => {
   const navigation = useNavigation();
+  const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
@@ -52,14 +55,38 @@ const RideOptionsCard = () => {
     };
     getTraveltime();
   }, [origin, destination, "AIzaSyDhIyWfb1NU_3fC0cJ5okzfnvImQb6QFnQ"]);
+  const putBooking = () => {
+    if (!selected) return;
+    Firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+        console.log(user);
+      } else {
+        setUser(null);
+        navigation.navigate("LoginScreen");
+      }
+    });
+    const bookingInfo = {
+      userId: user.uid,
+      origin: origin.description,
+      destination: destination.description,
+      travelTime: travelTimeInformation.duration.text,
+      distance: travelTimeInformation.distance.text,
+      requestAt: new Date().toLocaleString(),
+      carType: selected.title,
+      carTypeId: selected.id,
+      status: "pending",
+      OTP: Math.floor(1000 + Math.random() * 9000),
+    };
+    dispatch(setBooking(bookingInfo));
+    console.log(bookingInfo);
+  };
   return (
-    <View style={tw`bg-white  flex-grow`}>
+    <View style={tw`bg-white  flex-grow border-t border-gray-200 `}>
       <View>
         <TouchableOpacity
           style={tw`absolute left-5 p-3 rounded-full`}
-          onPress={
-            () => navigation.navigate("NavigateCard")
-          }
+          onPress={() => navigation.navigate("NavigateCard")}
         ></TouchableOpacity>
         <Text style={tw`text-center py-1 text-lg `}>Select a Ride</Text>
       </View>
@@ -104,6 +131,7 @@ const RideOptionsCard = () => {
       <View style={tw`mt-auto border-t border-gray-200`}>
         <TouchableOpacity
           disabled={!selected}
+          onPress={putBooking}
           style={tw`bg-black py-3 m-3 ${!selected && "bg-gray-400"}`}
         >
           <Text style={tw`text-center text-white text-lg`}>

@@ -15,12 +15,7 @@ const NavFavorite = () => {
             location: 'Current Location',
             destination: 'Chittarikkal, Kerala, India'
         },
-        {
-            id: '456',
-            icon: 'briefcase',
-            location: 'Home',
-            destination: 'Calicut, Kerala, India'
-        }
+        
     ]
     return (
         <FlatList

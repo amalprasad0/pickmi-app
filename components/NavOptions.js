@@ -50,13 +50,13 @@ const NavOptions = () => {
   const renderCard = ({ item }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate(item.screen)}
-      style={tw`p-2 pl-5 pb-8 pt-4 bg-gray-200 m-2 w-40 h-52 border border-gray-300 rounded-xl`}
+      style={[tw`p-2 pl-5 pb-5 pt-4 bg-gray-200 m-2  border border-gray-300 rounded-xl`,styles.NavCard]}
       disabled={!origin}
 
     >
       <View  style={tw`${!origin && "opacity-20"}`}>
         <Image
-          style={{ width: 120, height: 120, resizeMode: "contain" }}
+          style={{ width: 100, height: 100, resizeMode: "contain" }}
           source={{ uri: item.image }}
         />
         <Text style={tw`mt-2 ml-2 text-lg font-semibold`}>{item.title}</Text>
@@ -65,7 +65,7 @@ const NavOptions = () => {
   );
 
   const renderRow = ({ item }) => (
-    <View style={tw`flex-row`}>
+    <View style={[tw`flex-row`,styles.navOption]}>
       {item.map((card) => (
         <View style={tw`flex-1`} key={card.id}>
           {renderCard({ item: card })}
@@ -81,7 +81,7 @@ const NavOptions = () => {
 
   return (
     <FlatList
-      style={tw`mt-5 ml-4`}
+      // style={[tw`mt-1 `,{flexGrow: 0,justifyContent: 'center',alignItems: "center"}]}
       data={dividedData}
       keyExtractor={(item, index) => index.toString()}
       renderItem={renderRow}
@@ -91,4 +91,15 @@ const NavOptions = () => {
 
 export default NavOptions;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  navOption:{
+    flex: 0,
+    paddingLeft: '6%',
+    paddingTop: '5%',
+  },
+  NavCard:{
+    flex: 1,
+    width:'80%',
+  }
+  
+});
