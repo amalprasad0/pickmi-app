@@ -8,6 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import NavFavourite from './NavFavorite';
 import { useSelector } from 'react-redux';
 import { selectOrigin,selectDestination } from '../slices/navSlices';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/FontAwesome';
 const NavigateCard = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -59,6 +61,20 @@ const NavigateCard = () => {
                     <Text style={tw`text-center`}>Eats</Text>
                 </TouchableOpacity>
             </View> */}
+            <View style={tw`flex-row bg-white justify-evenly py-2 mt-auto border-t border-gray-200`}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate("HomeScreen")}
+                    style={tw`flex-1 flex-row w-24  justify-center bg-black px-1 py-3 rounded-full`}>
+                    <Icon name="check" size={20} color="white" style={tw`mr-1`}/>
+                    <Text style={tw`text-center text-white`}>Book</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("-//-")} 
+                style={tw`flex flex-row w-24 justify-between px-4 py-3 rounded-full`}>
+                    <Icon name="gear" size={20} color="black" style={tw`mr-1`}/>
+                    <Text style={tw`text-center`}>Setting</Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 }
