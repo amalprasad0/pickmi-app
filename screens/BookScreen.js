@@ -7,7 +7,6 @@ import { selectOrigin, selectDestination } from "../slices/navSlices";
 import NavigateCard from "../components/NavigateCard";
 import RideOption from "../components/RideOption";
 import { selectTravelTimeInformation } from "../slices/navSlices";
-
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,

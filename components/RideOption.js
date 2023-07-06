@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet,Alert, Text, View, Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { setTravelTimeInformation } from "../slices/navSlices";
 import { setBooking } from "../slices/navSlices";
 import { Firebase } from "../Config";
+
 const data = [
   {
     id: "Car-123",
@@ -131,7 +132,26 @@ const RideOptionsCard = () => {
       <View style={tw`mt-auto border-t border-gray-200`}>
         <TouchableOpacity
           disabled={!selected}
-          onPress={putBooking}
+          onPress={
+            () => {
+              
+              Alert.alert(
+                //This is title
+               'Confirm Booking',
+                 //This is body text
+               'Are you sure you want to book this ride?',
+               [
+                 {text: 'Book', onPress: () => {
+                    navigation.navigate("SuccessScreen");
+                 }},
+                 {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
+               ],
+               { cancelable: false }
+               //on clicking out side, Alert will not dismiss
+             );
+             
+           }
+          }
           style={tw`bg-black py-3 m-3 ${!selected && "bg-gray-400"}`}
         >
           <Text style={tw`text-center text-white text-lg`}>

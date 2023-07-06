@@ -13,6 +13,7 @@ import StartupScreen from "./screens/StartupScreen";
 import BookScreen from "./screens/BookScreen";
 import { StatusBar } from "expo-status-bar";
 import ConfirmScreen from "./screens/ConfirmScreen";
+import SuuccessScreen from "./screens/SuuccessScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -24,7 +25,7 @@ export default function App() {
           <NavigationContainer>
             <Stack.Navigator
               screenOptions={{ headerShown: false }}
-              initialRouteName="BookScreen"
+              initialRouteName="HomeScreen"
             >
               <Stack.Screen name="SignupScreen" component={SignupScreen} />
               <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -32,6 +33,7 @@ export default function App() {
               <Stack.Screen name="StartupScreen" component={StartupScreen} />
               <Stack.Screen name="BookScreen" component={BookScreen} />
               <Stack.Screen name="ConfirmScreen" component={ConfirmScreen} />
+              <Stack.Screen name="SuccessScreen" component={SuuccessScreen} />
 
             </Stack.Navigator>
           </NavigationContainer>

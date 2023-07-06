@@ -23,15 +23,15 @@ const TaxiBookingScreen = () => {
   const dispatch = useDispatch();
   //check if user is logged in  
   const [user, setUser] = useState(null);
-  Firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      setUser(user);
-      console.log(user);
-    } else {
-      setUser(null);
-      navigation.navigate("LoginScreen");
-    }
-  });
+  // Firebase.auth().onAuthStateChanged((user) => {
+  //   if (user) {
+  //     setUser(user);
+  //     console.log(user);
+  //   } else {
+  //     setUser(null);
+  //     navigation.navigate("LoginScreen");
+  //   }
+  // });
   
   return (
     <SafeAreaView style={[tw`bg-white h-full`]}>
@@ -74,7 +74,7 @@ const TaxiBookingScreen = () => {
                     <Text style={tw`text-center text-white`}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("-//-")} 
+                  onPress={() => navigation.navigate("suuccessScreen")} 
                 style={tw`flex flex-row w-24 justify-between px-4 py-3 rounded-full`}>
                     <Icon name="gear" size={20} color="black" style={tw`mr-1`}/>
                     <Text style={tw`text-center`}>Setting</Text>
