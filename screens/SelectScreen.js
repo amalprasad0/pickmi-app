@@ -1,8 +1,7 @@
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, Image, ScrollView, Pressable } from "react-native";
-import React from "react";
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, Image, ScrollView, Pressable,Animated } from "react-native";
 import tw from "twrnc";
 import Icon from "react-native-vector-icons/FontAwesome";
-import {useState} from "react"
+import React, { useState, useRef, useEffect } from "react";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 import * as Haptics from "expo-haptics";
 
@@ -68,13 +67,37 @@ const driverData = [
 
 const SelectScreen = () => {
   const [selectedCard, setSelectedCard] = useState(null);
-  console.log(selectedCard);
+  const [showBookButton, setShowBookButton] = useState(false);
+  const buttonPosition = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (showBookButton) {
+      Animated.spring(buttonPosition, {
+        toValue: 1,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.spring(buttonPosition, {
+        toValue: 0,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [showBookButton]);
 
   const handleCardPress = (index) => {
     setSelectedCard(index);
+    setShowBookButton(true);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
   };
+  const handleBookNow = () => {
+    // Handle book now functionality
+  };
+  const buttonTranslateY = buttonPosition.interpolate({
+    inputRange: [0, 1],
+    outputRange: [100, 0],
+  });
+
+
 
   return (
     <SafeAreaView style={[tw``, styles.container]}>
@@ -87,7 +110,7 @@ const SelectScreen = () => {
            <Pressable
            onPress={() => handleCardPress(index)}
            style={[
-             tw`p-2 pl-6 pb-8 pt-4 bg-gray-200 m-2 rounded-xl`,
+             tw`p-2 pl-6 pb-5 pt-4 bg-gray-200 m-2 rounded-xl`,
              styles.card,
              selectedCard === index && tw`bg-blue-200`, // Apply different background color to selected card
            ]}
@@ -129,15 +152,17 @@ const SelectScreen = () => {
           </Pressable>
         ))}
       </ScrollView>
-      <Pressable 
-      onPress={
-        ()=>{
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        }
-      }
-      style={[tw`bg-black py-3 rounded-lg`, styles.bookNowButton]}>
-        <Text style={tw`text-white text-center text-lg`}>Book Now</Text>
-      </Pressable>
+      <Animated.View
+        style={[
+          tw`bg-black py-3 rounded-lg`,
+          styles.bookNowButton,
+          { transform: [{ translateY: buttonTranslateY }] },
+        ]}
+      >
+        <Pressable onPress={handleBookNow}>
+          <Text style={tw`text-white text-center text-lg`}>Book Now</Text>
+        </Pressable>
+      </Animated.View>
     </SafeAreaView>
   );
 };
