@@ -11,6 +11,7 @@ import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { selectOrigin } from "../slices/navSlices";
+import * as Haptics from "expo-haptics";
 const cargoImage = require("./cargo.png");
 
 const data = [
@@ -49,7 +50,9 @@ const NavOptions = () => {
 
   const renderCard = ({ item }) => (
     <TouchableOpacity
-      onPress={() => navigation.navigate(item.screen)}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        navigation.navigate(item.screen)}}
       style={[tw`p-2 pl-5 pb-5 pt-4 bg-gray-200 m-2  border border-gray-300 rounded-xl`,styles.NavCard]}
       disabled={!origin}
 

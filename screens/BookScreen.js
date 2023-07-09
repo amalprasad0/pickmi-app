@@ -70,18 +70,7 @@ const BookScreen = () => {
             </Text>
           </View>
           <View style={tw` p-1 pl-5`}>
-            <Text style={tw`text-lg text-white `}>
-              Ride Mode :{" "}
-              <Text style={tw`text-sm text-white font-thin`}>
-                -not-seleted-
-              </Text>
-            </Text>
-            <Text style={tw`text-lg text-white mt-2`}>
-              Waiting Time :{" "}
-              <Text style={tw`text-sm text-white font-thin`}>
-                -not-seleted-
-              </Text>
-            </Text>
+
             <Text style={tw`text-lg text-white mt-2`}>
               Date & Time :{" "}
               <Text style={tw`text-sm text-white font-thin`}>

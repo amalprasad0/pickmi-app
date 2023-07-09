@@ -9,13 +9,13 @@ import {
 import tw from "twrnc";
 import NavOptions from "../components/NavOptions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { setDestination, setOrigin } from "../slices/navSlices";
+import { setDestination, setOrigin,  setUserCredentials } from "../slices/navSlices";
 import { useDispatch } from "react-redux";
 import NavFavorite from "../components/NavFavorite";
 import { Firebase } from "../Config";
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { useEffect } from "react";
 
 const TaxiBookingScreen = () => {
  
@@ -23,15 +23,17 @@ const TaxiBookingScreen = () => {
   const dispatch = useDispatch();
   //check if user is logged in  
   const [user, setUser] = useState(null);
-  // Firebase.auth().onAuthStateChanged((user) => {
-  //   if (user) {
-  //     setUser(user);
-  //     console.log(user);
-  //   } else {
-  //     setUser(null);
-  //     navigation.navigate("LoginScreen");
-  //   }
-  // });
+  useEffect(() => {
+  Firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      setUser(user);
+      console.log(user);
+      dispatch(setUserCredentials(user))
+    } else {
+      setUser(null);
+    }
+  });
+  }, []);
   
   return (
     <SafeAreaView style={[tw`bg-white h-full`]}>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet,Alert, Text, View, Image } from "react-native";
+import { StyleSheet, Alert, Text, View, Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux";
 import { setTravelTimeInformation } from "../slices/navSlices";
 import { setBooking } from "../slices/navSlices";
 import { Firebase } from "../Config";
+import * as Haptics from "expo-haptics";
+import { selectUserCredentials } from "../slices/navSlices";
 
 const data = [
   {
@@ -35,6 +37,13 @@ const data = [
 ];
 const SURGE_CHARGE_RATE = 1.5;
 const RideOptionsCard = () => {
+  const userCredentials = useSelector(selectUserCredentials);
+  console.log("user",userCredentials);
+  const year=new Date().getFullYear();
+  const month=new Date().getMonth();
+  const date=new Date().getDate();
+  const hours=new Date().getHours();
+  const bookingID = `${year}${date}${hours}${userCredentials.uid}_${Math.random().toString(36).substr(2, 5)}`;
   const navigation = useNavigation();
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
@@ -56,6 +65,60 @@ const RideOptionsCard = () => {
     };
     getTraveltime();
   }, [origin, destination, "AIzaSyDhIyWfb1NU_3fC0cJ5okzfnvImQb6QFnQ"]);
+  const BookSend = () => {
+    Firebase.firestore()
+      .collection("Booking")
+      .add({
+        userId: userCredentials.uid,
+        userEmail: userCredentials.email,
+        origin: origin.description,
+        destination: destination.description,
+        travelTime: travelTimeInformation.duration.text,
+        distance: travelTimeInformation.distance.text,
+        requestAt: new Date().toLocaleString(),
+        carType: selected.title,
+        carTypeId: selected.id,
+        status: "pending",
+        requestAccept: false,
+        OTP: Math.floor(1000 + Math.random() * 9000),
+        userOriginCoordinates: origin.location,
+        bookingId:bookingID
+      })
+      .then(() => {
+        navigation.navigate("SuccessScreen");
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Something went wrong with booking, please try again later"
+        );
+      });
+  };
+  savHistory = () => {
+    Firebase.firestore()
+      .collection("History").doc(user.uid)
+      .set({
+        userId: userCredentials.uid,
+        userEmail: userCredentials.email,
+        origin: origin.description,
+        destination: destination.description,
+        distance: travelTimeInformation.distance.text,
+        requestAt: new Date().toLocaleString(),
+        driverName: "Not Assigned",
+        driverEmail: "Not Assigned",
+        carType: selected.title,
+        carNum: "Not Assigned",
+        bookingId:bookingID
+      }).then(() => {
+        console.log("History Saved");
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Something went wrong with booking, please try again later",error
+        );
+      });
+  };
+
+
   const putBooking = () => {
     if (!selected) return;
     Firebase.auth().onAuthStateChanged((user) => {
@@ -64,11 +127,10 @@ const RideOptionsCard = () => {
         console.log(user);
       } else {
         setUser(null);
-        navigation.navigate("LoginScreen");
       }
     });
     const bookingInfo = {
-      userId: user.uid,
+      userEmail: userCredentials.email,
       origin: origin.description,
       destination: destination.description,
       travelTime: travelTimeInformation.duration.text,
@@ -77,7 +139,10 @@ const RideOptionsCard = () => {
       carType: selected.title,
       carTypeId: selected.id,
       status: "pending",
+      requestAccept: false,
       OTP: Math.floor(1000 + Math.random() * 9000),
+      userOriginCoordinates: origin.location,
+      bookingId:bookingID
     };
     dispatch(setBooking(bookingInfo));
     console.log(bookingInfo);
@@ -98,6 +163,7 @@ const RideOptionsCard = () => {
           <TouchableOpacity
             onPress={() => {
               setselected(item);
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
             }}
             style={tw`flex-row items-center justify-between px-10 ${
               id === selected?.id && "bg-gray-200"
@@ -132,26 +198,37 @@ const RideOptionsCard = () => {
       <View style={tw`mt-auto border-t border-gray-200`}>
         <TouchableOpacity
           disabled={!selected}
-          onPress={
-            () => {
-              
-              Alert.alert(
-                //This is title
-               'Confirm Booking',
-                 //This is body text
-               'Are you sure you want to book this ride?',
-               [
-                 {text: 'Book', onPress: () => {
-                    navigation.navigate("SuccessScreen");
-                 }},
-                 {text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel'},
-               ],
-               { cancelable: false }
-               //on clicking out side, Alert will not dismiss
-             );
-             
-           }
-          }
+          onPress={() => {
+            putBooking();
+            Alert.alert(
+              "Confirm Booking",
+              `Are you sure you want to book this ride from ${origin.description} to ${destination.description}`,
+              [
+                {
+                  text: "Book",
+                  onPress: () => {
+                    Haptics.notificationAsync(
+                      Haptics.NotificationFeedbackType.Success
+                    );
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                   if(userCredentials.uid!=null){
+                    BookSend();
+                    savHistory();
+                  }else{
+                    navigation.navigate("LoginScreen");
+                  }
+                }
+                },
+                {
+                  text: "No",
+                  onPress: () => console.log("No Pressed"),
+                  style: "cancel",
+                },
+              ],
+              { cancelable: false }
+              //on clicking out side, Alert will not dismiss
+            );
+          }}
           style={tw`bg-black py-3 m-3 ${!selected && "bg-gray-400"}`}
         >
           <Text style={tw`text-center text-white text-lg`}>

@@ -14,8 +14,17 @@ import BookScreen from "./screens/BookScreen";
 import { StatusBar } from "expo-status-bar";
 import ConfirmScreen from "./screens/ConfirmScreen";
 import SuuccessScreen from "./screens/SuuccessScreen";
-
+import { Firebase } from "./Config";
+import { setUserCredentials } from "./slices/navSlices";
+import SelectScreen from "./screens/SelectScreen";
 export default function App() {
+  Firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      console.log(user);
+    } else {
+      console.log("no user");
+    }
+  });
   const Stack = createNativeStackNavigator();
   return (
     <Provider store={store}>
@@ -25,7 +34,7 @@ export default function App() {
           <NavigationContainer>
             <Stack.Navigator
               screenOptions={{ headerShown: false }}
-              initialRouteName="HomeScreen"
+              initialRouteName="SelectScreen"
             >
               <Stack.Screen name="SignupScreen" component={SignupScreen} />
               <Stack.Screen name="HomeScreen" component={HomeScreen} />
@@ -34,6 +43,7 @@ export default function App() {
               <Stack.Screen name="BookScreen" component={BookScreen} />
               <Stack.Screen name="ConfirmScreen" component={ConfirmScreen} />
               <Stack.Screen name="SuccessScreen" component={SuuccessScreen} />
+              <Stack.Screen name="SelectScreen" component={SelectScreen} />
 
             </Stack.Navigator>
           </NavigationContainer>
