@@ -102,7 +102,7 @@ const SelectScreen = () => {
   return (
     <SafeAreaView style={[tw``, styles.container]}>
       <View>
-        <Icon name="angle-left" style={[tw`m-3 pl-3`]} size={30} />
+        <Icon name="angle-left" style={[tw`m-2 pl-3`]} size={30} />
       </View>
       <Text style={[tw`text-center text-lg mb-3`]}>Select the Car</Text>
       <ScrollView contentContainerStyle={tw`flex-grow justify-center`}>
@@ -112,7 +112,7 @@ const SelectScreen = () => {
            style={[
              tw`p-2 pl-6 pb-5 pt-4 bg-gray-200 m-2 rounded-xl`,
              styles.card,
-             selectedCard === index && tw`bg-blue-200`, // Apply different background color to selected card
+             selectedCard === index && tw`bg-neutral-300`, // Apply different background color to selected card
            ]}
            key={index}
          >
