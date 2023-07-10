@@ -65,60 +65,7 @@ const RideOptionsCard = () => {
     };
     getTraveltime();
   }, [origin, destination, "AIzaSyDhIyWfb1NU_3fC0cJ5okzfnvImQb6QFnQ"]);
-  const BookSend = () => {
-    Firebase.firestore()
-      .collection("Booking")
-      .add({
-        userId: userCredentials.uid,
-        userEmail: userCredentials.email,
-        origin: origin.description,
-        destination: destination.description,
-        travelTime: travelTimeInformation.duration.text,
-        distance: travelTimeInformation.distance.text,
-        requestAt: new Date().toLocaleString(),
-        carType: selected.title,
-        carTypeId: selected.id,
-        status: "pending",
-        requestAccept: false,
-        OTP: Math.floor(1000 + Math.random() * 9000),
-        userOriginCoordinates: origin.location,
-        bookingId:bookingID
-      })
-      .then(() => {
-        navigation.navigate("SuccessScreen");
-      })
-      .catch((error) => {
-        Alert.alert(
-          "Something went wrong with booking, please try again later"
-        );
-      });
-  };
-  savHistory = () => {
-    Firebase.firestore()
-      .collection("History").doc(user.uid)
-      .set({
-        userId: userCredentials.uid,
-        userEmail: userCredentials.email,
-        origin: origin.description,
-        destination: destination.description,
-        distance: travelTimeInformation.distance.text,
-        requestAt: new Date().toLocaleString(),
-        driverName: "Not Assigned",
-        driverEmail: "Not Assigned",
-        carType: selected.title,
-        carNum: "Not Assigned",
-        bookingId:bookingID
-      }).then(() => {
-        console.log("History Saved");
-      })
-      .catch((error) => {
-        Alert.alert(
-          "Something went wrong with booking, please try again later",error
-        );
-      });
-  };
-
-
+  
   const putBooking = () => {
     if (!selected) return;
     Firebase.auth().onAuthStateChanged((user) => {
@@ -212,8 +159,7 @@ const RideOptionsCard = () => {
                     );
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
                    if(userCredentials.uid!=null){
-                    BookSend();
-                    savHistory();
+                    navigation.navigate("SelectScreen");
                   }else{
                     navigation.navigate("LoginScreen");
                   }
