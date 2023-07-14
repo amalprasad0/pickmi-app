@@ -9,10 +9,7 @@ import { useSelector } from "react-redux";
 import { selectOrigin, selectDestination } from "../slices/navSlices";
 import { useDispatch } from "react-redux";
 import { setTravelTimeInformation } from "../slices/navSlices";
-import { setBooking } from "../slices/navSlices";
-import { Firebase } from "../Config";
 import * as Haptics from "expo-haptics";
-import { selectUserCredentials } from "../slices/navSlices";
 
 const data = [
   {
@@ -37,15 +34,7 @@ const data = [
 ];
 const SURGE_CHARGE_RATE = 1.5;
 const RideOptionsCard = () => {
-  const userCredentials = useSelector(selectUserCredentials);
-  console.log("user",userCredentials);
-  const year=new Date().getFullYear();
-  const month=new Date().getMonth();
-  const date=new Date().getDate();
-  const hours=new Date().getHours();
-  const bookingID = `${year}${date}${hours}${userCredentials.uid}_${Math.random().toString(36).substr(2, 5)}`;
   const navigation = useNavigation();
-  const [user, setUser] = useState(null);
   const dispatch = useDispatch();
   const origin = useSelector(selectOrigin);
   const destination = useSelector(selectDestination);
@@ -65,35 +54,7 @@ const RideOptionsCard = () => {
     };
     getTraveltime();
   }, [origin, destination, "AIzaSyDhIyWfb1NU_3fC0cJ5okzfnvImQb6QFnQ"]);
-  
-  const putBooking = () => {
-    if (!selected) return;
-    Firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-        console.log(user);
-      } else {
-        setUser(null);
-      }
-    });
-    const bookingInfo = {
-      userEmail: userCredentials.email,
-      origin: origin.description,
-      destination: destination.description,
-      travelTime: travelTimeInformation.duration.text,
-      distance: travelTimeInformation.distance.text,
-      requestAt: new Date().toLocaleString(),
-      carType: selected.title,
-      carTypeId: selected.id,
-      status: "pending",
-      requestAccept: false,
-      OTP: Math.floor(1000 + Math.random() * 9000),
-      userOriginCoordinates: origin.location,
-      bookingId:bookingID
-    };
-    dispatch(setBooking(bookingInfo));
-    console.log(bookingInfo);
-  };
+
   return (
     <View style={tw`bg-white  flex-grow border-t border-gray-200 `}>
       <View>
@@ -154,16 +115,10 @@ const RideOptionsCard = () => {
                 {
                   text: "Book",
                   onPress: () => {
-                    Haptics.notificationAsync(
-                      Haptics.NotificationFeedbackType.Success
-                    );
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-                   if(userCredentials.uid!=null){
+
                     navigation.navigate("SelectScreen");
-                  }else{
-                    navigation.navigate("LoginScreen");
-                  }
-                }
+                  },
                 },
                 {
                   text: "No",
