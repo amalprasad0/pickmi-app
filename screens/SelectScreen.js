@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,51 +10,46 @@ import {
   Pressable,
   Animated,
 } from "react-native";
-import tw from "twrnc";
+import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import React, { useState, useRef, useEffect } from "react";
+import tw from "twrnc";
+import * as Haptics from "expo-haptics";
+import SpinnerOverlay from "react-native-loading-spinner-overlay";
+import LottieView from "lottie-react-native";
+import { Firebase } from "../Config";
+import { selectOrigin } from "../slices/navSlices";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import * as Haptics from "expo-haptics";
-import { Firebase } from "../Config";
-import SpinnerOverlay from "react-native-loading-spinner-overlay";
-import { useNavigation } from "@react-navigation/native";
-import { selectOrigin } from "../slices/navSlices";
-import { useSelector } from "react-redux";
-import LottieView from "lottie-react-native";
 
 const SelectScreen = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [showBookButton, setShowBookButton] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isCarsAvailable, setIsCarsAvailable] = useState(true); // Track if cars are available
+  const [isCarsAvailable, setIsCarsAvailable] = useState(true);
   const navigation = useNavigation();
   const origin = useSelector(selectOrigin);
   const animation = useRef(null);
-
-  const originCoordinates = {
-    latitude: origin.location.lat,
-    longitude: origin.location.lng,
-  };
-
   const buttonPosition = useRef(new Animated.Value(0)).current;
+
   useEffect(() => {
-    if (showBookButton) {
-      Animated.spring(buttonPosition, {
-        toValue: 1,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.spring(buttonPosition, {
-        toValue: 0,
-        useNativeDriver: true,
-      }).start();
-    }
+    Animated.spring(buttonPosition, {
+      toValue: showBookButton ? 1 : 0,
+      useNativeDriver: true,
+    }).start();
   }, [showBookButton]);
 
-  const [driverData, setDriverData] = useState([]);
+  const handleCardPress = (index) => {
+    setSelectedCard(index);
+    setShowBookButton(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  };
+
+  const handleBookNow = () => {
+    navigation.navigate("SuccessScreen");
+  };
 
   useEffect(() => {
     const fetchDriverData = async () => {
@@ -86,14 +82,17 @@ const SelectScreen = () => {
       }
     };
 
+    const originCoordinates = {
+      latitude: origin.location.lat,
+      longitude: origin.location.lng,
+    };
+
     fetchDriverData();
-  }, []);
+  }, [origin]);
 
   const calculateDistance = (origin, destination) => {
-    const lat1 = origin.latitude;
-    const lon1 = origin.longitude;
-    const lat2 = destination.latitude;
-    const lon2 = destination.longitude;
+    const { latitude: lat1, longitude: lon1 } = origin;
+    const { latitude: lat2, longitude: lon2 } = destination;
 
     const R = 6371; // Radius of the earth in kilometers
     const dLat = deg2rad(lat2 - lat1);
@@ -113,23 +112,10 @@ const SelectScreen = () => {
     return deg * (Math.PI / 180);
   };
 
-  const handleCardPress = (index) => {
-    setSelectedCard(index);
-    setShowBookButton(true);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  };
-
-  const handleBookNow = () => {
-    navigation.navigate("SuccessScreen");
-  };
-
-  const buttonTranslateY = buttonPosition.interpolate({
-    inputRange: [0, 1],
-    outputRange: [100, 0],
-  });
+  const driverData = useSelector((state) => state.driverData);
 
   return (
-    <SafeAreaView style={[tw``, styles.container]}>
+    <SafeAreaView style={[styles.container, tw``]}>
       <Pressable
         onPress={() => {
           navigation.navigate("RideOption");
@@ -151,8 +137,8 @@ const SelectScreen = () => {
             <Pressable
               onPress={() => handleCardPress(index)}
               style={[
-                tw`p-2 pl-6 pb-5 pt-4 bg-gray-200 m-2 rounded-xl`,
                 styles.card,
+                tw`p-2 pl-6 pb-5 pt-4 bg-gray-200 m-2 rounded-xl`,
                 selectedCard === index && tw`bg-neutral-300`, // Apply different background color to selected card
               ]}
               key={index}
@@ -200,9 +186,14 @@ const SelectScreen = () => {
                     <Text style={tw`text-gray-600`}>2Km Away </Text>
                   </View>
                 </View>
-                <View style={tw`absolutebottom-4 right-4`}>
+                <View style={tw`absolute bottom-4 right-4`}>
                   <View style={tw`flex-row items-center`}>
-                    <Icon name="star" style={tw`mr-2`} size={18} color="gray" />
+                    <Icon
+                      name="star"
+                      style={tw`mr-2`}
+                      size={18}
+                      color="gray"
+                    />
                     <Text style={tw`text-gray-600`}>{item.rating}/5</Text>
                   </View>
                 </View>
@@ -210,37 +201,40 @@ const SelectScreen = () => {
             </Pressable>
           ))
         ) : (
-          <Animated.View
+          <View
             style={[
-              tw`flex flex-grow justify-center items-center`,
               styles.noCarsContainer,
+              tw`flex flex-grow justify-center items-center`,
             ]}
           >
             <LottieView
               autoPlay
-              loop={true}
+              loop
               ref={animation}
               style={{
                 width: 300,
                 height: 300,
               }}
-              // Find more Lottie files at https://lottiefiles.com/featured
               source={require("../assets/empty.json")}
             />
             <Text style={tw`text-center text-xl`}>
-              Sorry, no cars currently nearby.
+              Sorry, no cars are currently nearby.
             </Text>
             <Text style={tw`text-center text-sm min-w-min`}>
               Great news! We're expanding our services to your area!
             </Text>
-          </Animated.View>
+          </View>
         )}
       </ScrollView>
+
       <Animated.View
         style={[
-          tw`bg-black py-3 rounded-lg`,
           styles.bookNowButton,
-          { transform: [{ translateY: buttonTranslateY }] },
+          tw`bg-black py-3 rounded-lg`,
+          { transform: [{ translateY: buttonPosition.interpolate({
+            inputRange: [0, 1],
+            outputRange: [100, 0],
+          }) }] },
         ]}
       >
         <Pressable onPress={handleBookNow}>
