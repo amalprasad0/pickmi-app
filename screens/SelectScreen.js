@@ -221,7 +221,7 @@ const SelectScreen = () => {
               Sorry, no cars are currently nearby.
             </Text>
             <Text style={tw`text-center text-sm min-w-min`}>
-              Great news! We're expanding our services to your area!
+              Great news! We're expanding our services to your area !
             </Text>
           </View>
         )}
