@@ -107,7 +107,6 @@ const RideOptionsCard = () => {
         <TouchableOpacity
           disabled={!selected}
           onPress={() => {
-            putBooking();
             Alert.alert(
               "Confirm Booking",
               `Are you sure you want to book this ride from ${origin.description} to ${destination.description}`,
