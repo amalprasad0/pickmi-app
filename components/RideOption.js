@@ -115,7 +115,6 @@ const RideOptionsCard = () => {
                   text: "Book",
                   onPress: () => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-
                     navigation.navigate("SelectScreen");
                   },
                 },

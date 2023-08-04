@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   StatusBar,
   Image,
-  ScrollView,
+  FlatList,
   Pressable,
   Animated,
 } from "react-native";
@@ -34,6 +34,42 @@ const SelectScreen = () => {
   const animation = useRef(null);
   const buttonPosition = useRef(new Animated.Value(0)).current;
 
+  const fetchDriverData = async () => {
+    try {
+      setIsLoading(true);
+      const driversRef = Firebase.firestore().collection("Drivers");
+      const snapshot = await driversRef.get();
+      const drivers = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        const latitude = data.location.latitude;
+        const longitude = data.location.longitude;
+        return { ...data, latitude, longitude };
+      });
+      const filteredDrivers = drivers.filter((driver) => {
+        const driverCoordinates = {
+          latitude: driver.latitude,
+          longitude: driver.longitude,
+        };
+        const distance = calculateDistance(originCoordinates, driverCoordinates);
+        return distance <= 3; // Filter drivers within 3 kilometers
+      });
+      setDriverData(filteredDrivers);
+      setIsCarsAvailable(filteredDrivers.length > 0); // Check if cars are available
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching driver data:", error);
+    }
+  };
+
+  const originCoordinates = useMemo(() => ({
+    latitude: origin.location.lat,
+    longitude: origin.location.lng,
+  }), [origin]);
+
+  useEffect(() => {
+    fetchDriverData();
+  }, [origin]);
+
   useEffect(() => {
     Animated.spring(buttonPosition, {
       toValue: showBookButton ? 1 : 0,
@@ -50,45 +86,6 @@ const SelectScreen = () => {
   const handleBookNow = () => {
     navigation.navigate("SuccessScreen");
   };
-
-  useEffect(() => {
-    const fetchDriverData = async () => {
-      try {
-        setIsLoading(true);
-        const driversRef = Firebase.firestore().collection("Drivers");
-        const snapshot = await driversRef.get();
-        const drivers = snapshot.docs.map((doc) => {
-          const data = doc.data();
-          const latitude = data.location.latitude;
-          const longitude = data.location.longitude;
-          return { ...data, latitude, longitude };
-        });
-        const filteredDrivers = drivers.filter((driver) => {
-          const driverCoordinates = {
-            latitude: driver.latitude,
-            longitude: driver.longitude,
-          };
-          const distance = calculateDistance(
-            originCoordinates,
-            driverCoordinates
-          );
-          return distance <= 3; // Filter drivers within 3 kilometers
-        });
-        setDriverData(filteredDrivers);
-        setIsCarsAvailable(filteredDrivers.length > 0); // Check if cars are available
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching driver data:", error);
-      }
-    };
-
-    const originCoordinates = {
-      latitude: origin.location.lat,
-      longitude: origin.location.lng,
-    };
-
-    fetchDriverData();
-  }, [origin]);
 
   const calculateDistance = (origin, destination) => {
     const { latitude: lat1, longitude: lon1 } = origin;
@@ -112,7 +109,57 @@ const SelectScreen = () => {
     return deg * (Math.PI / 180);
   };
 
-  const driverData = useSelector((state) => state.driverData);
+  const [driverData, setDriverData] = useState([]);
+
+  useEffect(() => {
+    console.log("Driver Data:", driverData);
+  }, [driverData]);
+
+  const renderItem = ({ item, index }) => (
+    <Pressable
+      onPress={() => handleCardPress(index)}
+      style={[
+        styles.card,
+        tw`p-2 pl-6 pb-5 pt-4 bg-gray-200 m-2 rounded-xl`,
+        selectedCard === index && tw`bg-neutral-300`,
+      ]}
+      key={index}
+    >
+      <View style={tw`flex-row`}>
+        <Image
+          style={{ width: 100, height: 100, resizeMode: "contain" }}
+          source={{ uri: item.image }}
+        />
+        <View style={tw`ml-4 flex-grow`}>
+          <View style={tw`flex-row items-center mb-1`}>
+            <Text style={tw`text-gray-600 text-xl `}>{item.driverName}</Text>
+          </View>
+          <View style={tw`flex-row items-center mb-1`}>
+            <Icon name="car" style={tw`mr-2`} size={15} color="gray" />
+            <Text style={tw`text-gray-600`}>{item.vehicleName}</Text>
+          </View>
+          <View style={tw`flex-row items-center mb-1`}>
+            <Icon name="hashtag" style={tw`mr-2`} size={15} color="gray" />
+            <Text style={tw`text-gray-600`}>{item.vehicleNum}</Text>
+          </View>
+          <View style={tw`flex-row items-center mb-1`}>
+            <Icon name="credit-card" style={tw`mr-2`} size={15} color="gray" />
+            <Text style={tw`text-gray-600`}>UPI {item.upi}</Text>
+          </View>
+          <View style={tw`flex-row items-center mb-1`}>
+            <Icon name="map-marker" style={tw`mr-2`} size={18} color="gray" />
+            <Text style={tw`text-gray-600`}>2Km Away </Text>
+          </View>
+        </View>
+        <View style={tw`absolute bottom-4 right-4`}>
+          <View style={tw`flex-row items-center`}>
+            <Icon name="star" style={tw`mr-2`} size={18} color="gray" />
+            <Text style={tw`text-gray-600`}>{item.rating}/5</Text>
+          </View>
+        </View>
+      </View>
+    </Pressable>
+  );
 
   return (
     <SafeAreaView style={[styles.container, tw``]}>
@@ -125,82 +172,20 @@ const SelectScreen = () => {
         <Icon name="angle-left" style={[tw`m-2 pl-3`]} size={30} />
       </Pressable>
       <Text style={[tw`text-center text-lg mb-3`]}>Select the Car</Text>
-      <SpinnerOverlay
-        visible={isLoading}
-        textContent={"Please Wait..."}
-        textStyle={styles.spinnerText}
-      />
+      {isLoading && (
+        <SpinnerOverlay
+          visible={isLoading}
+          textContent={"Please Wait..."}
+          textStyle={styles.spinnerText}
+        />
+      )}
 
-      <ScrollView contentContainerStyle={tw`flex justify-center`}>
-        {isCarsAvailable ? (
-          driverData.map((item, index) => (
-            <Pressable
-              onPress={() => handleCardPress(index)}
-              style={[
-                styles.card,
-                tw`p-2 pl-6 pb-5 pt-4 bg-gray-200 m-2 rounded-xl`,
-                selectedCard === index && tw`bg-neutral-300`, // Apply different background color to selected card
-              ]}
-              key={index}
-            >
-              <View style={tw`flex-row`}>
-                <Image
-                  style={{ width: 100, height: 100, resizeMode: "contain" }}
-                  source={{ uri: item.image }}
-                />
-                <View style={tw`ml-4 flex-grow`}>
-                  <View style={tw`flex-row items-center mb-1`}>
-                    <Text style={tw`text-gray-600 text-xl `}>
-                      {item.driverName}
-                    </Text>
-                  </View>
-                  <View style={tw`flex-row items-center mb-1`}>
-                    <Icon name="car" style={tw`mr-2`} size={15} color="gray" />
-                    <Text style={tw`text-gray-600`}>{item.vehicleName}</Text>
-                  </View>
-                  <View style={tw`flex-row items-center mb-1`}>
-                    <Icon
-                      name="hashtag"
-                      style={tw`mr-2`}
-                      size={15}
-                      color="gray"
-                    />
-                    <Text style={tw`text-gray-600`}>{item.vehicleNum}</Text>
-                  </View>
-                  <View style={tw`flex-row items-center mb-1`}>
-                    <Icon
-                      name="credit-card"
-                      style={tw`mr-2`}
-                      size={15}
-                      color="gray"
-                    />
-                    <Text style={tw`text-gray-600`}>UPI {item.upi}</Text>
-                  </View>
-                  <View style={tw`flex-row items-center mb-1`}>
-                    <Icon
-                      name="map-marker"
-                      style={tw`mr-2`}
-                      size={18}
-                      color="gray"
-                    />
-                    <Text style={tw`text-gray-600`}>2Km Away </Text>
-                  </View>
-                </View>
-                <View style={tw`absolute bottom-4 right-4`}>
-                  <View style={tw`flex-row items-center`}>
-                    <Icon
-                      name="star"
-                      style={tw`mr-2`}
-                      size={18}
-                      color="gray"
-                    />
-                    <Text style={tw`text-gray-600`}>{item.rating}/5</Text>
-                  </View>
-                </View>
-              </View>
-            </Pressable>
-          ))
-        ) : (
+      <FlatList
+        data={driverData}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={tw`flex justify-center`}
+        ListEmptyComponent={() => (
           <View
             style={[
               styles.noCarsContainer,
@@ -225,16 +210,22 @@ const SelectScreen = () => {
             </Text>
           </View>
         )}
-      </ScrollView>
+      />
 
       <Animated.View
         style={[
           styles.bookNowButton,
           tw`bg-black py-3 rounded-lg`,
-          { transform: [{ translateY: buttonPosition.interpolate({
-            inputRange: [0, 1],
-            outputRange: [100, 0],
-          }) }] },
+          {
+            transform: [
+              {
+                translateY: buttonPosition.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [100, 0],
+                }),
+              },
+            ],
+          },
         ]}
       >
         <Pressable onPress={handleBookNow}>
