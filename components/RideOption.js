@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectOrigin, selectDestination } from "../slices/navSlices";
 import { useDispatch } from "react-redux";
-import { setTravelTimeInformation } from "../slices/navSlices";
+import { setTravelTimeInformation,setVehicle } from "../slices/navSlices";
 import * as Haptics from "expo-haptics";
 
 const data = [
@@ -16,18 +16,21 @@ const data = [
     id: "Car-123",
     title: "Car 5-seater",
     multiplier: 17,
+    type: "5",
     image: "https://links.papareact.com/3pn",
   },
   {
     id: "car-456",
     title: "Car 7-seater",
     multiplier: 19,
+    type: "7",
     image: "https://links.papareact.com/5w8",
   },
   {
     id: "Auto-123",
     title: "Auto Rickshaw",
     multiplier: 14,
+    type: "3",
     image:
       "https://cdnb.artstation.com/p/marketplace/presentation_assets/001/504/935/large/file.jpg?1643365883",
   },
@@ -54,23 +57,24 @@ const RideOptionsCard = () => {
     };
     getTraveltime();
   }, [origin, destination, "AIzaSyDhIyWfb1NU_3fC0cJ5okzfnvImQb6QFnQ"]);
-
+  console.log("Vehile",selected);
   return (
-    <View style={tw`bg-white  flex-grow border-t border-gray-200 `}>
+    <View style={tw`flex-grow bg-white border-t border-gray-200 `}>
       <View>
         <TouchableOpacity
-          style={tw`absolute left-5 p-3 rounded-full`}
+          style={tw`absolute p-3 rounded-full left-5`}
           onPress={() => navigation.navigate("NavigateCard")}
         ></TouchableOpacity>
-        <Text style={tw`text-center py-1 text-lg `}>Select a Ride</Text>
+        <Text style={tw`py-1 text-lg text-center `}>Select a Ride</Text>
       </View>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
-        renderItem={({ item: { id, title, multiplier, image }, item }) => (
+        renderItem={({ item: { id, title, multiplier,type, image }, item }) => (
           <TouchableOpacity
             onPress={() => {
               setselected(item);
+              dispatch(setVehicle({id,title,multiplier,type,image}));
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
             }}
             style={tw`flex-row items-center justify-between px-10 ${
@@ -107,6 +111,7 @@ const RideOptionsCard = () => {
         <TouchableOpacity
           disabled={!selected}
           onPress={() => {
+            
             Alert.alert(
               "Confirm Booking",
               `Are you sure you want to book this ride from ${origin.description} to ${destination.description}`,
@@ -116,6 +121,7 @@ const RideOptionsCard = () => {
                   onPress: () => {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
                     navigation.navigate("SelectScreen");
+                   
                   },
                 },
                 {
@@ -130,7 +136,7 @@ const RideOptionsCard = () => {
           }}
           style={tw`bg-black py-3 m-3 ${!selected && "bg-gray-400"}`}
         >
-          <Text style={tw`text-center text-white text-lg`}>
+          <Text style={tw`text-lg text-center text-white`}>
             Choose {selected?.title}
           </Text>
         </TouchableOpacity>

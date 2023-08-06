@@ -44,7 +44,6 @@ export default function App() {
               <Stack.Screen name="ConfirmScreen" component={ConfirmScreen} />
               <Stack.Screen name="SuccessScreen" component={SuuccessScreen} />
               <Stack.Screen name="SelectScreen" component={SelectScreen} />
-
             </Stack.Navigator>
           </NavigationContainer>
         </KeyboardAvoidingView>

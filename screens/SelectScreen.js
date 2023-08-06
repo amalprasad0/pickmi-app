@@ -18,7 +18,7 @@ import * as Haptics from "expo-haptics";
 import SpinnerOverlay from "react-native-loading-spinner-overlay";
 import LottieView from "lottie-react-native";
 import { Firebase } from "../Config";
-import { selectOrigin } from "../slices/navSlices";
+import { selectOrigin, selectVehicle } from "../slices/navSlices";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -31,8 +31,11 @@ const SelectScreen = () => {
   const [isCarsAvailable, setIsCarsAvailable] = useState(true);
   const navigation = useNavigation();
   const origin = useSelector(selectOrigin);
+  const vehicle = useSelector(selectVehicle);
   const animation = useRef(null);
   const buttonPosition = useRef(new Animated.Value(0)).current;
+  const vehicleType = vehicle?.type;
+  console.log("vehicleType", vehicleType);
 
   const fetchDriverData = async () => {
     try {
@@ -51,7 +54,8 @@ const SelectScreen = () => {
           longitude: driver.longitude,
         };
         const distance = calculateDistance(originCoordinates, driverCoordinates);
-        return distance <= 3; // Filter drivers within 3 kilometers
+        const isMatchingVehicleType = driver.vehicleType === vehicleType;
+        return distance <= 3 && isMatchingVehicleType; // Filter drivers within 3 kilometers
       });
       setDriverData(filteredDrivers);
       setIsCarsAvailable(filteredDrivers.length > 0); // Check if cars are available
@@ -97,9 +101,9 @@ const SelectScreen = () => {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos(deg2rad(lat1)) *
-        Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = R * c; // Distance in kilometers
     return distance;

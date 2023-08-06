@@ -48,15 +48,13 @@ const TaxiBookingScreen = () => {
   }, []);
   
   return (
-    <SafeAreaView style={[tw`bg-white h-full`]}>
+    <SafeAreaView style={[tw`h-full bg-white`]}>
       <View style={tw`pt-5 pl-4`}>
-        <Text style={tw`text-5xl font-bold mt-6`}>Pickmi</Text>
+        <Text style={tw`mt-6 text-5xl font-bold`}>Pickmi</Text>
       </View>
       <GooglePlacesAutocomplete
         nearbyPlacesAPI="GooglePlacesSearch"
-        currentLocation={true}
-        currentLocationLabel="Current location"
-        debounce={400}
+        debounce={100}
         placeholder="Where From?"
         styles={styles}
         onPress={(data, details = null) => {
@@ -83,16 +81,16 @@ const TaxiBookingScreen = () => {
       <NavOptions style={{}} />
       </View>
       <NavFavorite />
-      <View style={tw`flex-row bg-white justify-evenly py-2 mt-auto border-t border-gray-200`}>
+      <View style={tw`flex-row py-2 mt-auto bg-white border-t border-gray-200 justify-evenly`}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate("HomeScreen")}
-                    style={tw`flex flex-row w-24  justify-center bg-black px-1 py-3 rounded-full`}>
+                    style={tw`flex flex-row justify-center w-24 px-1 py-3 bg-black rounded-full`}>
                     <Icon name="home" size={20} color="white" style={tw`mr-1`}/>
                     <Text style={tw`text-center text-white`}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => navigation.navigate("suuccessScreen")} 
-                style={tw`flex flex-row w-24 justify-between px-4 py-3 rounded-full`}>
+                style={tw`flex flex-row justify-between w-24 px-4 py-3 rounded-full`}>
                     <Icon name="gear" size={20} color="black" style={tw`mr-1`}/>
                     <Text style={tw`text-center`}>Setting</Text>
                 </TouchableOpacity>
