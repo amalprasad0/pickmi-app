@@ -11,14 +11,17 @@ import NavOptions from "../components/NavOptions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { setDestination, setOrigin,  setUserCredentials } from "../slices/navSlices";
 import { useDispatch } from "react-redux";
-import NavFavorite from "../components/NavFavorite";
 import { Firebase } from "../Config";
 import { useNavigation } from "@react-navigation/native";
+<<<<<<< HEAD
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useEffect } from "react";
 import * as Location from 'expo-location';
 
 
+=======
+// import NavLocation from "../components/NavLocation";
+>>>>>>> a2710a86e28ee6413463c7ef3c942890d62f3e38
 const TaxiBookingScreen = () => {
   useEffect(() => {
   (async () => {
@@ -58,6 +61,8 @@ const TaxiBookingScreen = () => {
         placeholder="Where From?"
         styles={styles}
         onPress={(data, details = null) => {
+          console.log("Location",details.geometry.location);
+          console.log("Description",data.description);
           dispatch(
             setOrigin({
               location: details.geometry.location,
@@ -77,6 +82,7 @@ const TaxiBookingScreen = () => {
           
         }} // this is for the google maps api
       />
+<<<<<<< HEAD
       <View>
       <NavOptions style={{}} />
       </View>
@@ -95,6 +101,10 @@ const TaxiBookingScreen = () => {
                     <Text style={tw`text-center`}>Setting</Text>
                 </TouchableOpacity>
             </View>
+=======
+      <NavOptions />
+      {/* <NavLocation/> */}
+>>>>>>> a2710a86e28ee6413463c7ef3c942890d62f3e38
     </SafeAreaView>
   );
 };

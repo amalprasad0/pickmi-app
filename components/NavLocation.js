@@ -8,9 +8,10 @@
 // import * as Location from "expo-location";
 // import { setDestination, setOrigin } from "../slices/navSlices";
 // import { useDispatch } from "react-redux";
-// const NavFavorite = () => {
+// const NavLocation = () => {
 //   const navigation = useNavigation();
-//     const dispatch = useDispatch();
+//   const dispatch = useDispatch();
+
 //   const [latitude, setLatitude] = useState(0);
 //   const [longitude, setLongitude] = useState(0);
 //   const getCurrentLocation = async () => {
@@ -22,6 +23,8 @@
 //       }
 //       const location = await Location.getCurrentPositionAsync({});
 //       const { latitude, longitude } = location.coords;
+//       console.log("Latitude:", latitude);
+//       console.log("Longitude:", longitude);
 //       setLatitude(latitude);
 //       setLongitude(longitude);
 //     } catch (error) {
@@ -33,13 +36,13 @@
 //   }, []);
 
 //   const data = [
-//     // {
-//     //   id: "123",
-//     //   icon: "home",
-//     //   label: "Current Location",
-//     //   location: latitude + "," + longitude,
-//     //   destination: latitude + "," + longitude
-//     // },
+//     {
+//       id: "123",
+//       icon: "home",
+//       label: "Current Location",
+//       location: latitude + "," + longitude,
+//       destination: null,
+//     },
 //     {
 //       id: "456",
 //       icon: "briefcase",
@@ -54,20 +57,22 @@
 //       itemSeparatorComponent={() => (
 //         <View style={[tw`bg-gray-200`, { height: 0.5 }]} />
 //       )}
-//       renderItem={({ item: { label, destination, icon } }) => (
+//       renderItem={({ item: { label,location, destination, icon } }) => (
 //         <TouchableOpacity
 //           style={tw`flex-row items-center  p-5`}
 //           onPress={() => {
-//             dispatch(setDestination({
-//                 destination:destination,
-//                 description: label,
-            
-//             }));
+//             dispatch(setOrigin({
+//                 location: latitude + "," + longitude,
+//                 description: label,  
+//             }))
+//             dispatch(setDestination(destination))
+//             navigation.navigate("BookScreen")
+//             ;
 //           }}
 //         >
 //           <View style={tw`px-3`}>
 //             <Text style={tw`font-semibold text-lg`}>{label}</Text>
-//             <Text style={tw`text-gray-500`}>{destination}</Text>
+//             <Text style={tw`text-gray-500`}>{location}</Text>
 //           </View>
 //         </TouchableOpacity>
 //       )}
@@ -75,27 +80,6 @@
 //   );
 // };
 
-<<<<<<< HEAD
-const NavFavorite = () => {
-    const navigation = useNavigation()
-    const data = [
-        {
-            id: '123',
-            icon: 'home',
-            location: 'Current Location',
-            destination: 'Chittarikkal, Kerala, India'
-        },
-        
-    ]
-    return (
-        <FlatList
-            data={data}
-            keyExtractor={(item) => item.id}
-            itemSeparatorComponent={() => (
-                <View style={[tw`bg-gray-200`, { height: 0.5 }]} />
-            )}
-=======
-// export default NavFavorite;
->>>>>>> a2710a86e28ee6413463c7ef3c942890d62f3e38
+// export default NavLocation;
 
 // const styles = StyleSheet.create({});
