@@ -89,7 +89,7 @@ const SelectScreen = () => {
 
   const handleBookNow = () => {
     navigation.navigate("SuccessScreen");
-    
+    console.log("Book Now");
   };
 
   const calculateDistance = (origin, destination) => {
